@@ -36,6 +36,8 @@ var scripts = document.getElementsByTagName( "script" );
 var id=null;
 var style="nature"; // default style is nature
 var feed=null;
+// Look for last script that has a id matching "orcid:.*"
+// (Wonder whether there should be a way to run for multiple ids?)
 for (var j=scripts.length-1; j>=0; j--) {
     var idatt=scripts[j].id;
     if (idatt !== null) {
