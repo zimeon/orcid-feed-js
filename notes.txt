@@ -1,152 +1,61 @@
 ﻿ODIN Hackathon Oct 15-16 2013
 
-
 Project #8: JavaScript to embed ORCID works in any webpage
-
 
 Key features we want
 
-
 * description of item (i.e. the citation itself) + link to it (DOI ideally)
-
 
 * allow limiting no. items returned (e.g. URL param: ?maxcitations=x)
    and/or
   allow limiting no. displayed, i.e. fetch all and enable “show more” 
 
-
 * specify item order: most recently published (default from ORCID), by 1st author.. ? 
-
 
 * make it super-easy to use (drop-in Javascript library, 2-3 lines of HTML/code)
 
-
 * let user choose citation style (from list of all available CSL styles)
-
 
 * Use CiteProc/CSL to handle citation styling
 
-
 * useful error reporting (some quasi-sane exception catching, rather than just dumping stacktrace into the window)
-
-
-
 
 Q: should we just build on Martin’s orcid-feed tool
 
-
-
-
 Q: should we morph Martin’s tool into a citation list generator, i.e. style on the server side?
   [could perhaps use citeproc-ruby https://github.com/inukshuk/citeproc-ruby/ ]
-
 
 Erm, orcid-feed already does server-side citation styling. Apparently:
 http://feed.labs.orcid-eu.org/0000-0003-1419-2405.txt 
 http://feed.labs.orcid-eu.org/0000-0003-1419-2405.txt?style=nature
 http://feed.labs.orcid-eu.org/0000-0003-1419-2405.txt?style=ieee
 
-
 Action item for all: spend 1.5-2h to play with Citeproc + JSON, then regroup&assess situation
-
 
 Citeproc docs
 https://bitbucket.org/fbennett/citeproc-js/wiki/Home
 
-
 Martin’s ORCID API -> CiteProc JSON tool
 http://feed.labs.orcid-eu.org/0000-0003-1419-2405.json 
-
 
 Tom’s bibtex->JSON tool
 http://odinsprint.appspot.com/orcid/0000-0001-5635-1860 
 
-
-
-
 Enhancements to bibliography listing, e.g.  to highlight dataset citations
-
 
 * add icon to indicate whether DOI’d work is from DataCite or CrossRef
 
-
 * additional decoration to show data center icons? (e.g. Dryad, see Holly M Bik)
 
-
 * 
-
-
  
 Early conclusions
 
-
 * Doing styling client-side is too complex, so server-side it is
-
 
 * 2x server-side implementations underway
    orcid-feed (Martin/Mummi). Ruby/Sinatra app. Already CiteProc powered, has been modified to play nicely with JSONP client-side JS
       + 
   orcidlive.org (Roy) node.js/CiteProc powered, support JSONP from client-side jS
 
-
 * we want to look up DOI metadata directly on the server side, including which RA the DOI is from (CrossRef, DataCite).
-
-
-
-
-
-
-
-
-
-
-Some CSS for Simeon
-
-
-li {
-   margin-bottom: 0.5em;
-}
-
-
-div.footnote {
-   text-indent: -1.3em;
-   margin-left: 1.3em;
-   margin-bottom: 0.2em;
-}
-
-
-
-
-div.pagebreak {
-  page-break-before: always;
-}
-
-
-.hangindent {
-  text-indent: -2em;
-  margin-left: 2em;
-}
-
-
-h2 {
-  font-size: 110%;
-  margin-top: 1em;
-  margin-bottom: 0em;
-  padding-top: 0em;
-  padding-bottom: 0em;
-}
-
-
-h3 {
-  font-size: 95%;
-  margin-top: 0.9em;
-  margin-bottom: 0em;
-  padding-top: 0em;
-  padding-bottom: 0em;
-}
-
-
-div.csl-left-margin {
-  width:2em;
-  float:left;
-bibliography.css
