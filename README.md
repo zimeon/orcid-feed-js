@@ -1,6 +1,6 @@
 # ORCID Feed inclusion with JavaScript
 
-*WARNING:* This is demo code created as part of a codesprint for the [ODIN project](http://odin-project.eu/). I'm not a JavaScrip programmer, it is not polished, and it relies upon demonstration feed processing services that may not remain available. Buyer beware!
+*WARNING:* This is demo code created as part of a codesprint for the [ODIN project](http://odin-project.eu/). I'm not a JavaScript programmer, it is not polished, and it relies upon demonstration feed processing services that may not remain available. Buyer beware!
 
 ## 1. Why?
 
@@ -8,12 +8,25 @@ FIXME - description of goals and process, from Mummi's notes.
 
 ## 2. How to include
 
-At the place on your web page where you would like to include your ORCID profile bibliography, include the following to lines:
+At the place on your web page where you would like to include your ORCID profile bibliography, include the following two lines:
 
 ```javascript
 <div id="orcidbib">[Bibliography loads here]</div>
-<script src="orcidbib.js" type="text/javascript" id="orcid:0000-0002-7970-7855:nature:mt"></script>
+<script src="orcidbib.js" type="text/javascript" id="orcid:0000-0002-7970-7855"></script>
 ```
+
+where the {{id}} attribute is the way that the individual's ORCID iD is passed in, prefixed with {{orcid:}}.
+
+Optionally, the citation style may be added as another parameter, separated by a colon again. For example, to specify the {{ieee}} style, use:
+
+```javascript
+<div id="orcidbib">[Bibliography loads here]</div>
+<script src="orcidbib.js" type="text/javascript" id="orcid:0000-0002-7970-7855"></script>
+```
+
+FIXME - link to styles
+
+FIXME - description of use of orcidlive and Mummi/Martin's feeds
 
 ## 3. Concepts and processing
 
