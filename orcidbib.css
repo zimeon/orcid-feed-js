@@ -17,6 +17,12 @@ div.csl-left-margin {
   float:left;
 }
 
+div.csl-right-inline {
+  display: inline;
+  text-indent: -2em;
+  margin-left: 2em;
+}
+
 div.misc {
   color: #A00;
 }
