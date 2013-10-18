@@ -1,3 +1,18 @@
+/* Copyright 2013 Simeon Warner
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 function setBibliography(data) {
     // Function used by JSON callback
     var element=document.getElementById("orcidbib");
@@ -5,6 +20,19 @@ function setBibliography(data) {
 	showError("");
     } else {
 	element.innerHTML=data.html;
+    }
+}
+
+function setDefaultStyle() {
+    // Add a default set of styles at top of <head> so that
+    // settings will be overridden by any later style info
+    var style = document.createElement("style");
+    style.appendChild(document.createTextNode("div.csl-left-margin {width:2em; float:left;} div.csl-right-inline {display: inline; text-indent: -2em; margin-left: 2em;}"));
+    var head=document.head;
+    if (head.firstChild) {
+	head.insertBefore(style,head.firstChild);
+    } else {
+	head.appendChild(style);
     }
 }
 
@@ -56,12 +84,15 @@ for (var j=scripts.length-1; j>=0; j--) {
     }
 }
 // FIXME - should validate id here also, at least form
+setDefaultStyle();
 console.log("id="+id+" style="+style+" feed="+feed);
 if (id === null) {
     showError("Did not find id=\"orcid:NNNN-NNNN-NNNN-NNNN\" on a &lt;script&gt; tag.");
 } else {
-    if (feed == "mt") {
-	loadJSONP("http://128.141.237.49:8080/"+id+".html?callback=setBibliography&style="+style);
+    if (feed == "local") {
+	loadJSONP("./"+id+"_"+style+".jsonp");
+    } else if (feed == "mt") {
+	loadJSONP("http://128.141.227.162:8080/"+id+".html?callback=setBibliography&style="+style);
     } else { //default to orcidlive
         loadJSONP("http://orcidlive.org/ajax/formatWorks/orcid/"+id+"/style/"+style+"/callback/setBibliography");
     }
