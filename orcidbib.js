@@ -57,6 +57,32 @@ function loadJSONP(uri) {
     head.appendChild(script);
 }
 
+function generateCheckDigit(orcid_no_hyphens) { 
+    // Generates check digit as per ISO 7064 11,2 for 15 digit string
+    // http://support.orcid.org/knowledgebase/articles/116780-structure-of-the-orcid-identifier
+    var total = 0; 
+    var zero = "0".charCodeAt(0);
+    for (var i = 0; i < 15; i++) { 
+        var digit = orcid_no_hyphens.charCodeAt(i)-zero; 
+        total = (total + digit) * 2; 
+    } 
+    var result = (12 - (total % 11)) % 11; 
+    return(result == 10 ? "X" : String(result)); 
+}
+
+function invalidORCID(orcid) {
+    // False if orcid has correct form (including hyphens) and valid checksum, else error string
+    var orcid_no_hyphens=orcid.replace(/^(\d{4})-(\d{4})-(\d{4})-(\d\d\d[\dX])$/,"$1$2$3$4");
+    console.log("no hyphens: "+orcid_no_hyphens);
+    if (orcid_no_hyphens==orcid) { // will not match if replace succeeded
+	return "Invalid ORCID, bad form";
+    }
+    if (orcid_no_hyphens.charAt(15)!=generateCheckDigit(orcid_no_hyphens)) {
+	return "Invalid ORCID, bad check digit";
+    }
+    return false;
+}
+
 // Write loading message
 setBibliography({"html": "[Loading bibliography...]"});
 // Find script element which has id="orcid:ID[:STYLE]"
@@ -83,17 +109,20 @@ for (var j=scripts.length-1; j>=0; j--) {
 	}
     }
 }
-// FIXME - should validate id here also, at least form
+
 setDefaultStyle();
 console.log("id="+id+" style="+style+" feed="+feed);
 if (id === null) {
     showError("Did not find id=\"orcid:NNNN-NNNN-NNNN-NNNN\" on a &lt;script&gt; tag.");
+} else if (msg=invalidORCID(id)) {
+    showError(msg + " '" + id + "'");
 } else {
+    // All OK, try to load
     if (feed == "local") {
 	loadJSONP("./"+id+"_"+style+".jsonp");
     } else if (feed == "mt") {
 	loadJSONP("http://128.141.227.162:8080/"+id+".html?callback=setBibliography&style="+style);
     } else { //default to orcidlive
-        loadJSONP("http://orcidlive.org/ajax/formatWorks/orcid/"+id+"/style/"+style+"/callback/setBibliography");
+	loadJSONP("http://orcidlive.org/ajax/formatWorks/orcid/"+id+"/style/"+style+"/callback/setBibliography");
     }
 }
