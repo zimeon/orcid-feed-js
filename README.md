@@ -10,18 +10,18 @@ FIXME - description of goals and process, from Mummi's notes.
 
 At the place on your web page where you would like to include your ORCID profile bibliography, include the following two lines:
 
-```javascript
-<div id="orcidbib">[Bibliography loads here]<\/div>
-<script src="orcidbib.js" type="text/javascript" id="orcid:0000-0002-7970-7855"><\/script>
+```html
+<div id="orcidbib">[Bibliography loads here]</div>
+<script src="orcidbib.js" type="text/javascript" id="orcid:0000-0002-7970-7855"></script>
 ```
 
 where the {{id}} attribute is the way that the individual's ORCID iD is passed in, prefixed with {{orcid:}}.
 
 Optionally, the citation style may be added as another parameter, separated by a colon again. For example, to specify the {{ieee}} style, use:
 
-```javascript
-<div id="orcidbib">[Bibliography loads here]<\/div>
-<script src="orcidbib.js" type="text/javascript" id="orcid:0000-0002-7970-7855"><\/script>
+```html
+<div id="orcidbib">[Bibliography loads here]</div>
+<script src="orcidbib.js" type="text/javascript" id="orcid:0000-0002-7970-7855"></script>
 ```
 
 FIXME - link to styles
