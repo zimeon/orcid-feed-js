@@ -4,6 +4,8 @@
 
 ## 1. Why?
 
+We'd like to make is stupidly simple to include a bibliography from an ORCID profile in and other webpage. Like pages would be homepages and blogs for example. The code necessary should be very easy to add and configure for the appropriate citation style (which varies widely by discipline). 
+
 FIXME - description of goals and process, from Mummi's notes. 
 
 ## 2. How to include
@@ -43,7 +45,36 @@ $ curl -H 'Accept: application/orcid+xml' 'http://orcid.org/0000-0002-7970-7855/
 ORCID aims to support scholars across all academic disciplines and there are a great many different citation styles used by different disciplines. There is considerable existing work on citation formatting and descriptions of the many formatting styles (see, for example the Wikipedia articles on [CiteProc](http://en.wikipedia.org/wiki/CiteProc) and [Citation Style Language](http://en.wikipedia.org/wiki/Citation_Style_Language)). We
 thus chose to look at implementations of [CSL](http://citationstyles.org/) and found the JavaScript [citeproc-js](https://bitbucket.org/fbennett/citeproc-js) and the Ruby [citeproc-ruby](https://github.com/inukshuk/citeproc-ruby).
 
-FIXME - tried in-broswer citeproc-js but big (430kB) and cumbersome, moved to server implementation extending [Martin Fenner's work on feeds](http://blog.martinfenner.org/2013/07/26/rss-feeds-for-scholarly-authors/)
-
 FIXME - feeds implemented by Mummi and Roy, aim to build client with very simple config that can take either
 
+## Notes from ODIN codesprint
+
+### Key features wanted
+
+  * description of item (i.e. the citation itself) + link to it (DOI ideally)
+  * allow limiting number of items returned (e.g. URL param: ?maxcitations=x) and/or allow limiting number displayed displayed (i.e. fetch all and enable “show more”)
+  * specify item order: most recently published (default from ORCID), by 1st author.. ? 
+  * make it super-easy to use (drop-in Javascript library, 2-3 lines of HTML/code)
+  * let user choose citation style (from list of all available CSL styles, use CiteProc/CSL to handle citation styling, see [CiteProc documantation](https://bitbucket.org/fbennett/citeproc-js/wiki/Home)
+  * have useful error reporting so that non-programmer can debug issues (some quasi-sane exception catching, rather than just dumping stacktrace into the window)
+  * add icon to indicate whether DOI’d work is from DataCite or CrossRef
+  * would like some ability to decorate and/or split citation to highlight datasets (e.g. from Dryad)
+
+### Existing work
+
+[Martin Fenner's work on feeds](http://blog.martinfenner.org/2013/07/26/rss-feeds-for-scholarly-authors/) implemented an orcid-feed tool already does server-side citation styling. Only plain text output so far:
+  * http://feed.labs.orcid-eu.org/0000-0003-1419-2405.txt 
+  * http://feed.labs.orcid-eu.org/0000-0003-1419-2405.txt?style=nature
+  * http://feed.labs.orcid-eu.org/0000-0003-1419-2405.txt?style=ieee
+
+Martin’s orcid-feed tool outputs "CiteProc ready" JSON:
+  * http://feed.labs.orcid-eu.org/0000-0003-1419-2405.json 
+
+Tom created a bibtex->JSON tool using the bibtex from native ORCID API:
+  * http://odinsprint.appspot.com/orcid/0000-0001-5635-1860 
+
+### Early conclusions
+
+* Doing styling on the client-side requires too much code. Simeon git citeproc-js working but the citeproc.js code is ~430kB which really is too large to import for rendering homepages and such. It is also quite slow to run. Conclusion is that it is better to approach the problem with server-side running of citeproc. Do first expt with completely rendered HTML output but perhaps would be better to have on JSON array with on entry per item so then easy to truncate list or select portion in JavaScript app?
+
+* Would be good to understand type on the server-side so that can be expressed in simple ways allowing selection and/or styling of articles/datasets/etc.
