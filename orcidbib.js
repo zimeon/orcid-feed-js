@@ -73,7 +73,6 @@ function generateCheckDigit(orcid_no_hyphens) {
 function invalidORCID(orcid) {
     // False if orcid has correct form (including hyphens) and valid checksum, else error string
     var orcid_no_hyphens=orcid.replace(/^(\d{4})-(\d{4})-(\d{4})-(\d\d\d[\dX])$/,"$1$2$3$4");
-    console.log("no hyphens: "+orcid_no_hyphens);
     if (orcid_no_hyphens==orcid) { // will not match if replace succeeded
 	return "Invalid ORCID, bad form";
     }
@@ -83,35 +82,44 @@ function invalidORCID(orcid) {
     return false;
 }
 
-// Write loading message
-setBibliography({"html": "[Loading bibliography...]"});
 // Find script element which has id="orcid:ID[:STYLE]"
 var scripts = document.getElementsByTagName( "script" );
+var script = null;
 var id=null;
 var style="nature"; // default style is nature
 var feed=null;
 // Look for last script that has a id matching "orcid:.*"
 // (Wonder whether there should be a way to run for multiple ids?)
 for (var j=scripts.length-1; j>=0; j--) {
-    var idatt=scripts[j].id;
-    if (idatt !== null) {
-	var parts = idatt.split(":");
+    var script=scripts[j];
+    if (script.id !== null) {
+	var parts = script.id.split(":");
 	if (parts[0] == "orcid") {
 	    id = parts[1];
-	    // style as third part overrides default
+	    // style and feed override default if present
 	    if (parts[2]) {
 		style = parts[2];
-		if (parts[3]) {
-		    feed = parts[3];
-		}
+	    }
+	    if (parts[3]) {
+		feed = parts[3];
 	    }
 	    break;
 	}
     }
 }
-
+if (id !== null) {
+    // Add div for content if not present
+    if (document.getElementById("orcidbib") === null) {
+	var div = document.createElement("div");
+	div.id = "orcidbib";
+	// FIXME - find parent of script, not just body
+	var parent = document.body;
+	parent.insertBefore(div, script);
+    }
+    // Write loading message
+    setBibliography({"html": "[Loading bibliography...]"});
+}
 setDefaultStyle();
-console.log("id="+id+" style="+style+" feed="+feed);
 if (id === null) {
     showError("Did not find id=\"orcid:NNNN-NNNN-NNNN-NNNN\" on a &lt;script&gt; tag.");
 } else if (msg=invalidORCID(id)) {

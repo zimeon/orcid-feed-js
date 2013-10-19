@@ -8,12 +8,23 @@
 
 <h1>ORCID Feed Display Test</h1> 
 
-<p>Here is a bibliography from ORCID using local test file. Included with:</p>
+<p>Here is a bibliography from ORCID using local test file where the content is placed below by inderting the following <code>div</code>:</p> 
+<pre>
+&lt;div id="orcidbib"&gt;[Bibliography loads here]&lt;/div&gt;
+</pre>
+<div id="orcidbib">[Bibliography loads here]</div>
+<p>(end is here)</p>
+
+<p>The script is include here, instead:</p>
 <pre>
 &lt;script src="orcidbib.js" type="text/javascript" id="orcid:0000-0002-1825-0097::local"&gt;&lt;/script&gt;
 </pre> 
 <script src="orcidbib.js" type="text/javascript" id="orcid:0000-0002-1825-0097::local"></script>
-<p>(end is here)</p>
+
+</body>
+</html>
+
+
 
 </body>
 </html>
